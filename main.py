@@ -6,62 +6,71 @@ import json
 
 root = Tk()
 root.title("Weather App")
-root.geometry("350x600")
 color_primary = "#0d0b2e"
 color_white = "white"
 root.configure(background=color_primary)
 
+#images
+night_img = ImageTk.PhotoImage(Image.open("Night.jpg"))
+celsius_icon =  ImageTk.PhotoImage(Image.open("celsius.png"))
+rain_icon = ImageTk.PhotoImage(Image.open("rain.png"))
 
 
 def search():
+    global night_img
+    global celsius_icon 
+    global rain_icon
 
-    #connecting to api
-    apikey = f"http://api.weatherapi.com/v1/current.json?key=a5b634c8339b46b5a60161317203110&q=f'{city.get()}'"
+    try:
+        #connecting to api
+        apikey = f"http://api.weatherapi.com/v1/current.json?key=a5b634c8339b46b5a60161317203110&q={city.get()}"
 
-    api_request = requests.get(apikey)
-    api_response = json.loads(api_request.content)
-    city_name = api_response["location"]["name"]
-    country_name = api_response["location"]["country"]
-    temp_c = api_response["current"]["temp_c"]
+        api_request = requests.get(apikey)
+        api_response = json.loads(api_request.content)
 
+        city_name = f"{api_response['location']['name']}"
+        country_name = f"{api_response['location']['country']}"
+        temp_c =f"{api_response['current']['temp_c']}" 
+
+
+        
+
+        
+
+        #day
+        today = date.today()
+        
+        # sun_icon = ImageTk.PhotoImage(Image.open("sun.png"))
+
+
+
+        #labels
+        #images
+        night_img_label = Label(image=night_img)
+        celsius_icon_label = Label(bg=color_primary,image=celsius_icon)
+        rain_icon_label = Label(bg=color_primary,image=rain_icon)
+        # sun_icon_label = Label(bg=color_primary,image=sun_icon)
+
+
+        #texts
+        Today_label = Label(root,text="Today",fg=color_white,bg=color_primary,font=30)
+        today_label = Label(root,fg=color_white,bg=color_primary,text=today.strftime("%a, %d %b"))
+        temp_label = Label(root,bg=color_primary,fg=color_white,text=temp_c,)
+        cityAndCountry_label = Label(root,fg=color_white,bg=color_primary,text=f"{city_name}, {country_name} ")
+        #images display
+        night_img_label.place(x=49,y=280)
+        rain_icon_label.place(x=116,y=100)
+        Today_label.place(x=150,y=100)
+        today_label.place(x=150,y=120)
+        temp_label.place(x=116,y=170)
+        celsius_icon_label.place(x=200,y=170)
+        cityAndCountry_label.place(x=116,y=250)
+
+    except Exception as e:
+        print(e)
+        Label(root,text=e).grid(row=10,column=1)
 
     city.delete(0,END)
-
-    
-
-    #day
-    today = date.today()
-    #images
-    night_img = ImageTk.PhotoImage(Image.open("Night.jpg"))
-    celsius_icon =  ImageTk.PhotoImage(Image.open("celsius.png"))
-    rain_icon = ImageTk.PhotoImage(Image.open("rain.png"))
-    # sun_icon = ImageTk.PhotoImage(Image.open("sun.png"))
-
-
-
-    #labels
-    #images
-    night_img_label = Label(image=night_img)
-    celsius_icon_label = Label(bg=color_primary,image=celsius_icon)
-    rain_icon_label = Label(bg=color_primary,image=rain_icon)
-    # sun_icon_label = Label(bg=color_primary,image=sun_icon)
-
-
-    #texts
-    Today_label = Label(root,text="Today",fg=color_white,bg=color_primary,font=30)
-    today_label = Label(root,fg=color_white,bg=color_primary,text=today.strftime("%a, %d %b"))
-    temp_label = Label(root,bg=color_primary,fg=color_white,text=temp_c,)
-    cityAndCountry_label = Label(root,fg=color_white,bg=color_primary,text=f"{city_name}, {country_name} ")
-    #images display
-    night_img_label.place(x=49,y=280)
-    rain_icon_label.place(x=116,y=100)
-    Today_label.place(x=150,y=100)
-    today_label.place(x=150,y=120)
-    temp_label.place(x=116,y=170)
-    celsius_icon_label.place(x=200,y=170)
-    cityAndCountry_label.place(x=116,y=250)
-
-
 
 #setup
 
